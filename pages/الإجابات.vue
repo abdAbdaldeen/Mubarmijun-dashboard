@@ -98,12 +98,12 @@ export default {
       return this.$route.query.enableRTL;
     },
     isRTL() {
-      return this.$rtl.isRTL;
+      return true;
     },
   },
   beforeDestroy() {
-    this.switchLocalePath("en");
-    this.$rtl.disableRTL();
+    // this.switchLocalePath("en");
+    // this.$rtl.disableRTL();
   },
 };
 </script>

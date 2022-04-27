@@ -3,8 +3,8 @@
     <notifications></notifications>
     <side-bar
       :background-color="sidebarBackground"
-      :short-title="$t('sidebar.shortTitle')"
-      :title="$t('sidebar.title')"
+      short-title="لوحة التحكم"
+      title="لوحة التحكم"
     >
       <template slot-scope="props" slot="links">
         <!-- <sidebar-item
@@ -66,25 +66,25 @@
           }"
         ></sidebar-item>
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.rtl'),
             icon: 'tim-icons icon-world',
             path: localePath('/rtl', 'ar'),
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
         <sidebar-item
           :link="{
-            name: $t('questions'),
+            name: 'الاسئلة',
             icon: 'el-icon-question-mark',
-            path: localePath('/questions', 'ar'),
+            path: '/questions',
           }"
         ></sidebar-item>
         <sidebar-item
           :link="{
-            name: $t('answers'),
+            name: 'الإجابات',
             icon: 'el-icon-question-mark',
-            path: localePath('/answers', 'ar'),
+            path: '/الإجابات',
           }"
         ></sidebar-item>
         <!-- <sidebar-item
@@ -95,7 +95,7 @@
           }"
         ></sidebar-item> -->
 
-        <li class="active-pro">
+        <!-- <li class="active-pro">
           <a
             href="https://www.creative-tim.com/product/nuxt-black-dashboard-pro"
             target="_blank"
@@ -103,7 +103,7 @@
             <i class="tim-icons icon-spaceship"></i>
             <p>Upgrade to PRO</p>
           </a>
-        </li>
+        </li> -->
       </template>
     </side-bar>
     <!--Share plugin (for demo purposes). You can remove it if don't plan on using it-->

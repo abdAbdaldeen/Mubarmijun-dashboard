@@ -63,24 +63,25 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    'cookie-universal-nuxt',
     '@nuxtjs/pwa',
     'nuxt-i18n'
   ],
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        file: 'en.js'
-      },
-      {
-        code: 'ar',
-        file: 'ar.js'
-      }
-    ],
-    lazy: true,
-    langDir: 'lang/',
-    defaultLocale: 'en',
-  },
+  // i18n: {
+  //   locales: [
+  //     {
+  //       code: 'en',
+  //       file: 'en.js'
+  //     },
+  //     {
+  //       code: 'ar',
+  //       file: 'ar.js'
+  //     }
+  //   ],
+  //   lazy: true,
+  //   langDir: 'lang/',
+  //   defaultLocale: 'en',
+  // },
   /*
   ** Build configuration
   */
@@ -102,5 +103,8 @@ export default {
         ]
       ]
     }
+  },
+  router: {
+    middleware: 'checkToken'
   }
 }
