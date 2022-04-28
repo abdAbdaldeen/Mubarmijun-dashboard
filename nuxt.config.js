@@ -63,10 +63,14 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
     'cookie-universal-nuxt',
     '@nuxtjs/pwa',
     'nuxt-i18n'
   ],
+  axios: {
+    baseURL: process.env.BASE_URL,
+  },
   // i18n: {
   //   locales: [
   //     {

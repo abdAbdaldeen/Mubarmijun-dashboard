@@ -26,7 +26,7 @@
           placeholder="كلمة المرور"
         >
         </base-input>
-        <el-button type="primary" :class="{ 'float-right': isRTL }"
+        <el-button type="primary" :class="{ 'float-right': isRTL }" @click="submit" :loading="loading"
           >تسجيل الدخول</el-button
         >
       </form>
@@ -61,6 +61,30 @@ export default {
     errorMsg: "",
     loading: false,
   }),
+  methods: {
+    async submit() {
+      try {
+        this.loading = true
+        const res = await this.$axios.post('users/login', {
+          email: this.email,
+          password: this.password,
+        })
+        this.$store.commit('user/login', res.data)
+        this.$cookies.set('authToken', res.data.token, {
+          path: '/',
+          maxAge: 60 * 60
+        })
+        // console.log(res.data)
+        this.$router.push('/')
+      } catch (error) {
+        const msg =
+          error.response && error.response.data && error.response.data.error
+        this.errorMsg =
+          msg || 'عذرا لقد حدث خطأ غير معروف، يرجى المحاولة مرة أخرى'
+        this.loading = false
+      }
+    },
+  },
   mounted() {
     this.$rtl.enableRTL();
   },
