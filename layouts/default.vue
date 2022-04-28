@@ -77,7 +77,7 @@
           :link="{
             name: 'الاسئلة',
             icon: 'el-icon-question-mark',
-            path: '/questions',
+            path: '/الأسئلة',
           }"
         ></sidebar-item>
         <sidebar-item
@@ -85,6 +85,20 @@
             name: 'الإجابات',
             icon: 'el-icon-question-mark',
             path: '/الإجابات',
+          }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'المستخدمون',
+            icon: 'el-icon-question-mark',
+            path: '/المستخدمون',
+          }"
+        ></sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'المسؤولون',
+            icon: 'el-icon-question-mark',
+            path: '/المسؤولون',
           }"
         ></sidebar-item>
         <!-- <sidebar-item
