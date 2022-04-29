@@ -69,13 +69,16 @@ export default {
           email: this.email,
           password: this.password,
         })
-        this.$store.commit('user/login', res.data)
-        this.$cookies.set('authToken', res.data.token, {
-          path: '/',
-          maxAge: 60 * 60
-        })
-        // console.log(res.data)
-        this.$router.push('/')
+        if (res.data.isAdmin) {
+          this.$store.commit('user/login', res.data)
+          this.$cookies.set('authToken', res.data.token, {
+            path: '/',
+            maxAge: 60 * 60
+          })
+          this.$router.push('/')
+        } else {
+          // TODO: not admin
+        }
       } catch (error) {
         const msg =
           error.response && error.response.data && error.response.data.error
