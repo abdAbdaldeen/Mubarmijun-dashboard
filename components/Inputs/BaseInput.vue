@@ -4,7 +4,7 @@
     :class="{
       'input-group-focus': focused,
       'has-danger': error,
-      'has-success': !error && touched,
+      //'has-success': !error && touched,
       'has-label': label,
       'has-icon': hasIcon,
     }"
