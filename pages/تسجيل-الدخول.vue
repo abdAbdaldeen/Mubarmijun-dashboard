@@ -3,6 +3,12 @@
     <card class="SICard">
       <form ref="form" class="SIForm">
         <h1>تسجيل الدخول</h1>
+        <el-alert
+          v-if="errorMsg"
+          :title="errorMsg"
+          type="error"
+          show-icon>
+        </el-alert>
         <base-input
           class="input"
           :class="{ 'text-right': isRTL }"
@@ -36,12 +42,14 @@
 
 <script>
 import Card from "~/components/Cards/Card.vue";
-import { Button } from "element-ui";
+import { Button, Alert } from "element-ui";
 export default {
   layout: "signIn",
   components: {
     Card,
     [Button.name]: Button,
+    [Alert.name]: Alert,
+
   },
   data: () => ({
     valid: false,
@@ -65,6 +73,7 @@ export default {
     async submit() {
       try {
         this.loading = true
+        this.errorMsg = ""
         const res = await this.$axios.post('users/login', {
           email: this.email,
           password: this.password,
