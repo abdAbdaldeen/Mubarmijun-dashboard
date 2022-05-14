@@ -6,29 +6,28 @@
       class="search"
       :class="{ 'text-right': isRTL }"
     />
+    <el-input placeholder="Please input" class="input-with-select">
+    <el-button slot="append" icon="el-icon-search"></el-button>
+  </el-input>
     <el-table
-      :data="
-        tableData.filter(
-          (data) =>
-            !search || data.name.toLowerCase().includes(search.toLowerCase())
-        )
-      "
+      :data="Object.values(data.questions)"
       style="width: 100%"
     >
       <el-table-column type="expand" :class="{ 'float-right': isRTL }">
         <template slot-scope="props">
-          <p align="right">نص السؤال : {{ props.row.body }}</p>
+          <p align="right">نص السؤال:</p>
+          <div v-html="props.row.body"></div>
         </template>
       </el-table-column>
       <el-table-column align="right" label="العنوان" prop="title">
       </el-table-column>
-      <el-table-column align="right" label="عدد الاصوات" prop="votesNum">
-      </el-table-column>
+      <el-table-column align="right" label="عدد الاصوات" prop="votesCount" max-width="70"/>
+      <el-table-column align="right" label="عدد الابلاغات" prop="reportsCount" max-width="70"/>
       <el-table-column
         align="right"
         label="الاسم"
-        prop="userName"
-        max-width="50"
+        prop="userRecord.displayName"
+        
       >
       </el-table-column>
       <el-table-column align="right" min-width="100" label="الاجراءات">
@@ -59,6 +58,23 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Button.name]: Button,
+  },
+  async asyncData({ $axios, store, error, redirect }) {
+    return await $axios
+      .$get('/admin/questions/get',{
+              headers: {
+                authorization: `Bearer ${store.state.user.token}`,
+              },
+            })
+      .then((r) => {
+        const questions = r.questions
+        const lastKey = r.lastKey
+        store.commit('questions/add', { questions, lastKey })
+      })
+      .catch((e) => {
+        console.error(e)
+        // error({ statusCode: 404, message: 'Post not found' });
+      })
   },
   data() {
     return {
@@ -98,8 +114,22 @@ export default {
     handleBlock(index, row) {
       console.log(index, row);
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    async handleDelete(index, row) {
+      await this.$axios
+      .$post('/admin/questions/delete',{
+        qID: row.qID
+      },{
+              headers: {
+                authorization: `Bearer ${this.$store.state.user.token}`,
+              },
+            })
+      .then((r) => {
+        console.log(r)
+      })
+      .catch((e) => {
+        console.error(e)
+        // error({ statusCode: 404, message: 'Post not found' });
+      })
     },
   },
   mounted() {
@@ -111,6 +141,9 @@ export default {
     },
     isRTL() {
       return true;
+    },
+    data() {
+      return this.$store.state.questions.data
     },
   },
   beforeDestroy() {

@@ -31,7 +31,7 @@ export default {
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css'}
     ],
     bodyAttrs: {
-      class: '' // Add `white-content` class here to enable "white" mode.
+      class: 'white-content' // Add `white-content` class here to enable "white" mode.
     }
   },
   router: {
