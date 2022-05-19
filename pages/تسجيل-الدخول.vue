@@ -84,7 +84,7 @@ export default {
             path: '/',
             maxAge: 60 * 60
           })
-          this.$router.push('/')
+          this.$router.push('/%D8%A7%D9%84%D8%A3%D8%B3%D8%A6%D9%84%D8%A9')
         } else {
           // TODO: not admin
         }

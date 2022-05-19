@@ -1,30 +1,14 @@
 <template>
   <div :class="isRTL ? 'float-left' : 'float-right'">
-    <input
-      type="text"
-      placeholder="ادخل رابط السؤال او عنوانه"
-      class="search"
-      :class="{ 'text-right': isRTL }"
-    />
-    <el-input
-      placeholder="Please input"
-      class="input-with-select"
-      v-model="search"
+    <el-table
+      :data="data"
+      style="width: 100%"
     >
-      <el-button
-        slot="append"
-        icon="el-icon-search"
-        @click="handleSearch"
-      ></el-button>
-    </el-input>
-    <el-table :data="questionsArr" style="width: 100%">
       <el-table-column type="expand" :class="{ 'float-right': isRTL }">
         <template slot-scope="props">
-          <p align="right">نص السؤال:</p>
+          <p align="right">الاجابة:</p>
           <div v-html="props.row.body"></div>
         </template>
-      </el-table-column>
-      <el-table-column align="right" label="العنوان" prop="title">
       </el-table-column>
       <el-table-column
         align="right"
@@ -46,10 +30,9 @@
       <el-table-column
         align="right"
         label="الاسم"
-        prop="userRecord.displayName"
-      >
-      </el-table-column>
-      <el-table-column align="right" min-width="100" label="الاجراءات">
+        prop="uName"
+      />
+            <el-table-column align="right" min-width="100" label="الاجراءات">
         <template slot-scope="scope" :class="{ 'text-right': isRTL }">
           <div :id="'actions-' + scope.$index" class="actionsContainer">
             <el-button
@@ -63,7 +46,7 @@
               @click="handleBlock(scope.$index, scope.row)"
             >
               {{
-                !scope.row.userRecord.disabled ? "حظر السائل" : "الغاء الحظر"
+                !scope.row.disabled ? "حظر المستخدم" : "الغاء الحظر"
               }}
             </el-button>
             <el-button
@@ -72,14 +55,6 @@
               @click="handleDelete(scope.$index, scope.row)"
               >حذف
             </el-button>
-            
-            <nuxt-link :to="'/الإجابات/' + scope.row.qID">
-            <el-button
-              size="mini"
-              >
-              الاجابات ->
-            </el-button>
-            </nuxt-link>
             <span> انتظر قليلاً ... </span>
           </div>
         </template>
@@ -88,7 +63,7 @@
   </div>
 </template>
 <script>
-import { Button, Table, TableColumn, link } from "element-ui";
+import { Button, Table, TableColumn } from "element-ui";
 
 export default {
   name: "questions",
@@ -96,19 +71,20 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Button.name]: Button,
-    [link.name]: link,
   },
-  async asyncData({ $axios, store, error, redirect }) {
+  async asyncData({ $axios, store, error, redirect, route }) {
     return await $axios
-      .$get("/admin/questions/get", {
+      .$get("/admin/answers/get", {
+        params: {
+          qID: route.params.id,
+        },
         headers: {
           authorization: `Bearer ${store.state.user.token}`,
         },
       })
       .then((r) => {
-        const questions = r.questions;
-        const lastKey = r.lastKey;
-        store.commit("questions/add", { questions, lastKey });
+        console.log(r)
+        store.commit("answers/add", r);
       })
       .catch((e) => {
         console.error(e);
@@ -127,8 +103,8 @@ export default {
         .$post(
           "/admin/hideDoc",
           {
-            dID: row.qID,
-            collection: "questions",
+            dID: row.aID,
+            collection: "answers",
             reportsCount: row.reportsCount,
           },
           {
@@ -145,7 +121,7 @@ export default {
           // error({ statusCode: 404, message: 'Post not found' });
         });
       let reportsCount = row.reportsCount < 10 ? 1000 : 0;
-      this.$store.commit("questions/updateReportsCount", {
+      this.$store.commit("answers/updateReportsCount", {
         reportsCount,
         index,
       });
@@ -153,8 +129,8 @@ export default {
     },
     async handleBlock(index, row) {
       document.querySelector(`#actions-${index}`).classList.add("loading");
-      let uid = this.questionsArr[index].userRecord.uid;
-      let value = this.questionsArr[index].userRecord.disabled || "";
+      let uid = this.data[index].userID;
+      let value = this.data[index].disabled || "";
       let r = await this.$axios
         .$get("/admin/blockUser", {
           params: {
@@ -173,16 +149,17 @@ export default {
           return 0;
           // error({ statusCode: 404, message: 'Post not found' });
         });
-      r && this.$store.commit("questions/blockUser", { index, value });
+      r && this.$store.commit("answers/blockUser", { index, value });
       document.querySelector(`#actions-${index}`).classList.remove("loading");
     },
     async handleDelete(index, row) {
       document.querySelector(`#actions-${index}`).classList.add("loading");
       await this.$axios
         .$post(
-          "/admin/questions/delete",
+          "/admin/deleteDoc",
           {
-            qID: row.qID,
+            docID: row.aID,
+            collection: 'answers'
           },
           {
             headers: {
@@ -203,24 +180,6 @@ export default {
         });
       // true && this.$store.commit('questions/delete',{index})
     },
-    async handleSearch() {
-      try {
-        let qID = this.search;
-        let r = await this.$axios.$get("/admin/questions/getOne", {
-          params: {
-            qID,
-          },
-          headers: {
-            authorization: `Bearer ${this.$store.state.user.token}`,
-          },
-        });
-        let questions = {};
-        questions[r.question.qID] = r.question;
-        this.$store.commit("questions/add", { questions, lastKey: "" });
-      } catch (error) {
-        console.error(error);
-      }
-    },
   },
   mounted() {
     this.$rtl.enableRTL();
@@ -233,10 +192,7 @@ export default {
       return true;
     },
     data() {
-      return this.$store.state.questions.data;
-    },
-    questionsArr() {
-      return Object.values(this.data.questions);
+      return this.$store.state.answers.data;
     },
   },
   beforeDestroy() {
@@ -256,9 +212,6 @@ export default {
 }
 .table-transparent {
   background-color: transparent !important;
-}
-.hidedDoc {
-  color: red;
 }
 .actionsContainer {
   & > span {
