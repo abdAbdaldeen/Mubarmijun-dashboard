@@ -90,7 +90,6 @@ export default {
       })
       .then((r) => {
         const usersList = r.usersList;
-        console.log(usersList);
         const nextPageToken = r.nextPageToken;
         store.commit("users/add", { usersList, nextPageToken });
       })
