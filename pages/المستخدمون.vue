@@ -1,25 +1,17 @@
 <template>
   <div :class="isRTL ? 'float-left' : 'float-right'">
     <h1 :class="{ 'text-right': isRTL }">جدول المستخدمين</h1>
-    <input
+    <!-- <input
       type="text"
       placeholder="ادخل اسم المسخدم"
       class="search"
       :class="{ 'float-right': isRTL }"
-    />
-    <el-table
-      :data="
-        tableData.filter(
-          (data) =>
-            !search || data.name.toLowerCase().includes(search.toLowerCase())
-        )
-      "
-      style="width: 100%"
-    >
+    /> -->
+    <el-table :data="data.usersList" style="width: 100%">
       <el-table-column
         align="right"
         label="الاسم"
-        prop="userName"
+        prop="displayName"
         max-width="50"
       >
       </el-table-column>
@@ -30,7 +22,17 @@
         max-width="50"
       >
       </el-table-column>
-      <el-table-column align="right" label="تاريخ الانضمام" prop="date">
+      <el-table-column
+        align="right"
+        label="تاريخ الانضمام"
+        prop="metadata.creationTime"
+      >
+      </el-table-column>
+      <el-table-column
+        align="right"
+        label="آخر تسجيل دخول"
+        prop="metadata.lastSignInTime"
+      >
       </el-table-column>
 
       <el-table-column
@@ -43,21 +45,27 @@
 
       <el-table-column align="right" min-width="150" label="الاجراءات">
         <template slot-scope="scope" :class="{ 'text-right': isRTL }">
-          <el-button size="mini" @click="handleBlock(scope.$index, scope.row)">
-            حظر
-          </el-button>
-          <el-button
-            size="mini"
-            @click="handleMakeAdmin(scope.$index, scope.row)"
-          >
-            جعله مسؤول
-          </el-button>
-          <el-button
+          <div :id="'actions-' + scope.$index" class="actionsContainer">
+            <el-button
+              size="mini"
+              @click="handleBlock(scope.$index, scope.row)"
+            >
+              {{ scope.row.disabled ? "الغاء الحظر" : "حظر" }}
+            </el-button>
+            <el-button
+              size="mini"
+              @click="handleMakeAdmin(scope.$index, scope.row)"
+            >
+              {{ scope.row.admin ? "سحب الصلاحيات" : "جعله مسؤول" }}
+            </el-button>
+            <span> انتظر قليلاً ... </span>
+          </div>
+          <!-- <el-button
             size="mini"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)"
             >حذف
-          </el-button>
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -73,46 +81,82 @@ export default {
     [TableColumn.name]: TableColumn,
     [Button.name]: Button,
   },
+  async asyncData({ $axios, store, error, redirect }) {
+    return await $axios
+      .$get("/admin/users/get", {
+        headers: {
+          authorization: `Bearer ${store.state.user.token}`,
+        },
+      })
+      .then((r) => {
+        const usersList = r.usersList;
+        console.log(usersList);
+        const nextPageToken = r.nextPageToken;
+        store.commit("users/add", { usersList, nextPageToken });
+      })
+      .catch((e) => {
+        console.error(e);
+        // error({ statusCode: 404, message: 'Post not found' });
+      });
+  },
   data() {
     return {
-      tableData: [
-        {
-          date: "00/00/0000",
-          userName: "محمد احمد",
-          email: "user@anything",
-          coins: "00",
-        },
-        {
-          date: "00/00/0000",
-          userName: "John",
-          email: "user@anything",
-          coins: "00",
-        },
-        {
-          date: "00/00/0000",
-          userName: "Morgan",
-          email: "user@anything",
-          coins: "00",
-        },
-        {
-          date: "00/00/0000",
-          userName: "Jessy",
-          email: "user@anything",
-          coins: "00",
-        },
-      ],
       search: "",
     };
   },
   methods: {
-    handleBlock(index, row) {
-      console.log(index, row);
+    async handleBlock(index, row) {
+      document.querySelector(`#actions-${index}`).classList.add("loading");
+      let uid = this.data.usersList[index].uid;
+      let value = this.data.usersList[index].disabled || "";
+      let r = await this.$axios
+        .$get("/admin/blockUser", {
+          params: {
+            uid,
+            value,
+          },
+          headers: {
+            authorization: `Bearer ${this.$store.state.user.token}`,
+          },
+        })
+        .then((r) => {
+          return 1;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+          // error({ statusCode: 404, message: 'Post not found' });
+        });
+      r && this.$store.commit("users/blockUser", { index, value });
+      document.querySelector(`#actions-${index}`).classList.remove("loading");
     },
-    handleMakeAdmin(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
+    async handleMakeAdmin(index, row) {
+      document.querySelector(`#actions-${index}`).classList.add("loading");
+      let uid = this.data.usersList[index].uid;
+      let value = this.data.usersList[index].admin || "";
+      let r = await this.$axios
+        .$post(
+          "/admin/users/addAdmin",
+          {
+            uid,
+            value,
+          },
+          {
+            headers: {
+              authorization: `Bearer ${this.$store.state.user.token}`,
+            },
+          }
+        )
+        .then((r) => {
+          return 1;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+          // error({ statusCode: 404, message: 'Post not found' });
+        });
+      r && this.$store.commit("users/makeAdmin", { index, value });
+      document.querySelector(`#actions-${index}`).classList.remove("loading");
     },
   },
   mounted() {
@@ -125,6 +169,9 @@ export default {
     isRTL() {
       return true;
     },
+    data() {
+      return this.$store.state.users.data;
+    },
   },
   beforeDestroy() {
     // this.switchLocalePath("en");
@@ -132,7 +179,7 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .search {
   margin: auto;
   margin-bottom: 2rem;
@@ -143,5 +190,19 @@ export default {
 }
 .table-transparent {
   background-color: transparent !important;
+}
+
+.actionsContainer {
+  & > span {
+    display: none;
+  }
+}
+.actionsContainer.loading {
+  & > span {
+    display: block;
+  }
+  button {
+    display: none;
+  }
 }
 </style>
