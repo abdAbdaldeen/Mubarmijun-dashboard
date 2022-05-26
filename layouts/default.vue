@@ -58,13 +58,13 @@
           }"
         ></sidebar-item> -->
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.typography'),
             icon: 'tim-icons icon-align-center',
             path: '/typography',
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
 
         <!-- <sidebar-item
           :link="{
@@ -76,31 +76,29 @@
         <sidebar-item
           :link="{
             name: 'الاسئلة',
-            icon: 'el-icon-question-mark',
             path: '/الأسئلة',
           }"
         ></sidebar-item>
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'الإجابات',
             icon: 'el-icon-question-mark',
             path: '/الإجابات',
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
         <sidebar-item
           :link="{
             name: 'المستخدمون',
-            icon: 'el-icon-question-mark',
             path: '/المستخدمون',
           }"
         ></sidebar-item>
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'المسؤولون',
-            icon: 'el-icon-question-mark',
             path: '/المسؤولون',
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
+        
         <!-- <sidebar-item
           :link="{
             name: $t('signInForm'),
