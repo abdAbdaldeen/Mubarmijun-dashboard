@@ -98,7 +98,12 @@
             path: '/المسؤولون',
           }"
         ></sidebar-item> -->
-        
+        <sidebar-item
+          :link="{
+            name: 'المجموعات',
+            path: '/المجموعات',
+          }"
+        ></sidebar-item>
         <!-- <sidebar-item
           :link="{
             name: $t('signInForm'),
