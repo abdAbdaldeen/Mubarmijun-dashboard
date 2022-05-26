@@ -1,11 +1,11 @@
 <template>
   <div :class="isRTL ? 'float-left' : 'float-right'">
-    <input
+    <!-- <input
       type="text"
       placeholder="ادخل رابط السؤال او عنوانه"
       class="search"
       :class="{ 'text-right': isRTL }"
-    />
+    /> -->
     <el-input
       placeholder="Please input"
       class="input-with-select"
