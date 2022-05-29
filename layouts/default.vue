@@ -100,8 +100,8 @@
         ></sidebar-item> -->
         <sidebar-item
           :link="{
-            name: 'المجموعات',
-            path: '/المجموعات',
+            name: 'التصنيفات',
+            path: '/التصنيفات',
           }"
         ></sidebar-item>
         <!-- <sidebar-item
