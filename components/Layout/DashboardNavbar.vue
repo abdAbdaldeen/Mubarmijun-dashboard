@@ -20,7 +20,7 @@
     </div>
 
     <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-      <div class="search-bar input-group" @click="searchModalVisible = true">
+      <!-- <div class="search-bar input-group" @click="searchModalVisible = true">
         <button
           class="btn btn-link"
           id="search-button"
@@ -29,7 +29,7 @@
         >
           <i class="tim-icons icon-zoom-split"></i>
         </button>
-        <!-- You can choose types of search input -->
+       
       </div>
       <modal
         :show.sync="searchModalVisible"
@@ -46,8 +46,8 @@
           id="inlineFormInputGroup"
           placeholder="SEARCH"
         />
-      </modal>
-      <base-dropdown
+      </modal> -->
+      <!-- <base-dropdown
         tag="li"
         :menu-on-right="!$rtl.isRTL"
         title-tag="a"
@@ -80,7 +80,7 @@
         <li class="nav-link">
           <a href="#" class="nav-item dropdown-item">Another one</a>
         </li>
-      </base-dropdown>
+      </base-dropdown> -->
       <base-dropdown
         tag="li"
         :menu-on-right="!$rtl.isRTL"
@@ -127,7 +127,7 @@ export default {
       if(parts == ','){
         return 'Dashboard';
       }
-      return parts.map(p => this.capitalizeFirstLetter(p)).join(' ');
+      return decodeURI(parts.join(' '));
     },
     isRTL() {
       return this.$rtl.isRTL;

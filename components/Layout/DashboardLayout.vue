@@ -3,8 +3,8 @@
     <notifications></notifications>
     <side-bar
       :background-color="sidebarBackground"
-      :short-title="$t('sidebar.shortTitle')"
-      :title="$t('sidebar.title')"
+      short-title="لوحة التحكم"
+      title="لوحة التحكم"
     >
       <template slot-scope="props" slot="links">
         <sidebar-item

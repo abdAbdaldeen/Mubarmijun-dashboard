@@ -19,7 +19,7 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: 'Nuxt Black Dashboard',
+    title: 'مبرمجون-لوحة التحكم',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -31,7 +31,7 @@ export default {
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css'}
     ],
     bodyAttrs: {
-      class: '' // Add `white-content` class here to enable "white" mode.
+      class: 'white-content' // Add `white-content` class here to enable "white" mode.
     }
   },
   router: {
@@ -63,24 +63,29 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
     '@nuxtjs/pwa',
     'nuxt-i18n'
   ],
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        file: 'en.js'
-      },
-      {
-        code: 'ar',
-        file: 'ar.js'
-      }
-    ],
-    lazy: true,
-    langDir: 'lang/',
-    defaultLocale: 'en',
+  axios: {
+    baseURL: process.env.BASE_URL,
   },
+  // i18n: {
+  //   locales: [
+  //     {
+  //       code: 'en',
+  //       file: 'en.js'
+  //     },
+  //     {
+  //       code: 'ar',
+  //       file: 'ar.js'
+  //     }
+  //   ],
+  //   lazy: true,
+  //   langDir: 'lang/',
+  //   defaultLocale: 'en',
+  // },
   /*
   ** Build configuration
   */
@@ -102,5 +107,8 @@ export default {
         ]
       ]
     }
+  },
+  router: {
+    middleware: 'checkToken'
   }
 }

@@ -3,8 +3,8 @@
     <notifications></notifications>
     <side-bar
       :background-color="sidebarBackground"
-      :short-title="$t('sidebar.shortTitle')"
-      :title="$t('sidebar.title')"
+      short-title="لوحة التحكم"
+      title="لوحة التحكم"
     >
       <template slot-scope="props" slot="links">
         <!-- <sidebar-item
@@ -58,33 +58,50 @@
           }"
         ></sidebar-item> -->
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.typography'),
             icon: 'tim-icons icon-align-center',
             path: '/typography',
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
 
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: $t('sidebar.rtl'),
             icon: 'tim-icons icon-world',
             path: localePath('/rtl', 'ar'),
           }"
-        ></sidebar-item>
+        ></sidebar-item> -->
         <sidebar-item
           :link="{
-            name: $t('questions'),
-            icon: 'el-icon-question-mark',
-            path: localePath('/questions', 'ar'),
+            name: 'الاسئلة',
+            path: '/الأسئلة',
           }"
         ></sidebar-item>
+        <!-- <sidebar-item
+          :link="{
+            name: 'الإجابات',
+            icon: 'el-icon-question-mark',
+            path: '/الإجابات',
+          }"
+        ></sidebar-item> -->
         <sidebar-item
           :link="{
-            name: $t('answers'),
-            icon: 'el-icon-question-mark',
-            path: localePath('/answers', 'ar'),
+            name: 'المستخدمون',
+            path: '/المستخدمون',
+          }"
+        ></sidebar-item>
+        <!-- <sidebar-item
+          :link="{
+            name: 'المسؤولون',
+            path: '/المسؤولون',
+          }"
+        ></sidebar-item> -->
+        <sidebar-item
+          :link="{
+            name: 'التصنيفات',
+            path: '/التصنيفات',
           }"
         ></sidebar-item>
         <!-- <sidebar-item
@@ -95,7 +112,7 @@
           }"
         ></sidebar-item> -->
 
-        <li class="active-pro">
+        <!-- <li class="active-pro">
           <a
             href="https://www.creative-tim.com/product/nuxt-black-dashboard-pro"
             target="_blank"
@@ -103,7 +120,7 @@
             <i class="tim-icons icon-spaceship"></i>
             <p>Upgrade to PRO</p>
           </a>
-        </li>
+        </li> -->
       </template>
     </side-bar>
     <!--Share plugin (for demo purposes). You can remove it if don't plan on using it-->

@@ -1,5 +1,6 @@
 <template>
   <div :class="isRTL ? 'float-left' : 'float-right'">
+    <h1 :class="{ 'text-right': isRTL }">جدول المسؤولين</h1>
     <el-table
       :data="
         tableData.filter(
@@ -9,13 +10,6 @@
       "
       style="width: 100%"
     >
-      <el-table-column type="expand" :class="{ 'float-right': isRTL }">
-        <template slot-scope="props">
-          <p align="right">الاجابة : {{ props.row.body }}</p>
-        </template>
-      </el-table-column>
-      <el-table-column align="right" label="عدد الاصوات" prop="votesNum">
-      </el-table-column>
       <el-table-column
         align="right"
         label="الاسم"
@@ -23,13 +17,34 @@
         max-width="50"
       >
       </el-table-column>
-      <el-table-column align="right" min-width="100" label="الاجراءات">
+      <el-table-column
+        align="right"
+        label="البريد الالكتروني"
+        prop="email"
+        max-width="50"
+      >
+      </el-table-column>
+      <el-table-column align="right" label="تاريخ الانضمام" prop="date">
+      </el-table-column>
+
+      <el-table-column
+        align="right"
+        label="عدد العملات"
+        prop="coins"
+        max-width="50"
+      >
+      </el-table-column>
+
+      <el-table-column align="right" min-width="150" label="الاجراءات">
         <template slot-scope="scope" :class="{ 'text-right': isRTL }">
-          <el-button size="mini" @click="handleHide(scope.$index, scope.row)">
-            اخفاء
-          </el-button>
           <el-button size="mini" @click="handleBlock(scope.$index, scope.row)">
-            حظر السائل
+            حظر
+          </el-button>
+          <el-button
+            size="mini"
+            @click="handleMakeNotAdmin(scope.$index, scope.row)"
+          >
+            حجب الصلاحيات
           </el-button>
           <el-button
             size="mini"
@@ -46,7 +61,7 @@
 import { Button, Table, TableColumn } from "element-ui";
 
 export default {
-  name: "questions",
+  name: "answers",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
@@ -56,34 +71,38 @@ export default {
     return {
       tableData: [
         {
-          votesNum: "100",
+          date: "00/00/0000",
           userName: "محمد احمد",
-          body: "السلام عليكم ",
+          email: "user@anything",
+          coins: "00",
         },
         {
-          votesNum: "John",
-          userName: "No. 189, Grove St, Los Angeles",
-          body: "السلام عليكم ",
+          date: "00/00/0000",
+          userName: "John",
+          email: "user@anything",
+          coins: "00",
         },
         {
-          votesNum: "Morgan",
-          userName: "No. 189, Grove St, Los Angeles",
-          body: "السلام عليكم ",
+          date: "00/00/0000",
+          userName: "Morgan",
+          email: "user@anything",
+          coins: "00",
         },
         {
-          votesNum: "Jessy",
-          userName: "No. 189, Grove St, Los Angeles",
-          body: "السلام عليكم ",
+          date: "00/00/0000",
+          userName: "Jessy",
+          email: "user@anything",
+          coins: "00",
         },
       ],
       search: "",
     };
   },
   methods: {
-    handleHide(index, row) {
+    handleBlock(index, row) {
       console.log(index, row);
     },
-    handleBlock(index, row) {
+    handleMakeNotAdmin(index, row) {
       console.log(index, row);
     },
     handleDelete(index, row) {
@@ -98,12 +117,12 @@ export default {
       return this.$route.query.enableRTL;
     },
     isRTL() {
-      return this.$rtl.isRTL;
+      return true;
     },
   },
   beforeDestroy() {
-    this.switchLocalePath("en");
-    this.$rtl.disableRTL();
+    // this.switchLocalePath("en");
+    // this.$rtl.disableRTL();
   },
 };
 </script>

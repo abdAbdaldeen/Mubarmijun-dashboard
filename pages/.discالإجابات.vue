@@ -1,11 +1,5 @@
 <template>
   <div :class="isRTL ? 'float-left' : 'float-right'">
-    <input
-      type="text"
-      placeholder="ادخل رابط السؤال او عنوانه"
-      class="search"
-      :class="{ 'text-right': isRTL }"
-    />
     <el-table
       :data="
         tableData.filter(
@@ -17,10 +11,8 @@
     >
       <el-table-column type="expand" :class="{ 'float-right': isRTL }">
         <template slot-scope="props">
-          <p align="right">نص السؤال : {{ props.row.body }}</p>
+          <p align="right">الاجابة : {{ props.row.body }}</p>
         </template>
-      </el-table-column>
-      <el-table-column align="right" label="العنوان" prop="title">
       </el-table-column>
       <el-table-column align="right" label="عدد الاصوات" prop="votesNum">
       </el-table-column>
@@ -64,25 +56,21 @@ export default {
     return {
       tableData: [
         {
-          title: "عنوان السؤال",
           votesNum: "100",
           userName: "محمد احمد",
           body: "السلام عليكم ",
         },
         {
-          title: "2016-05-02",
           votesNum: "John",
           userName: "No. 189, Grove St, Los Angeles",
           body: "السلام عليكم ",
         },
         {
-          title: "2016-05-04",
           votesNum: "Morgan",
           userName: "No. 189, Grove St, Los Angeles",
           body: "السلام عليكم ",
         },
         {
-          title: "2016-05-01",
           votesNum: "Jessy",
           userName: "No. 189, Grove St, Los Angeles",
           body: "السلام عليكم ",
@@ -110,12 +98,12 @@ export default {
       return this.$route.query.enableRTL;
     },
     isRTL() {
-      return this.$rtl.isRTL;
+      return true;
     },
   },
   beforeDestroy() {
-    this.switchLocalePath("en");
-    this.$rtl.disableRTL();
+    // this.switchLocalePath("en");
+    // this.$rtl.disableRTL();
   },
 };
 </script>
